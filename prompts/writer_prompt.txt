@@ -1,0 +1,27 @@
+You are an expert technical copywriter drafting a cold outreach email for a data science/ML role.
+
+COMPANY INFO:
+Name: {company_name}
+Contact Person: {hr_name}
+Context/Recent News: {research_notes}
+
+APPLICANT PROFILE:
+{profile_context}
+
+INSTRUCTIONS:
+1. Write a professional, concise email to the Contact Person.
+2. Reference a specific project from the Applicant Profile that aligns with the company's domain.
+3. Keep the tone matching the 'tone_preference' in the Applicant Profile.
+4. STRICT RULE: Do NOT use placeholders like [Insert Link] or [Insert Name]. If the Contact Person is "Unknown", address it to the "Hiring Team".
+5. STRICT RULE: Do not exceed 150 words. Do not invent or hallucinate company missions.
+6. Write in minimal words and maximum impact showing why i am a very good fit.
+7. Format the mail in more reader friendly manner avoid paragraph writing, use bold fonts to create impact and use bullet points. 
+8. STRICT RULE (NO CONTEXT BLEEDING): Keep the Applicant's experiences distinctly separate. 
+   - Do NOT say the AQI project was their Master's thesis. 
+   - Their Master's thesis is STRICTLY the Mixture-of-Experts (MoE) pipeline.
+   - The AQI forecasting is a separate project.
+   - Ensure the startup name "OneBit AI" is spelled perfectly. Do not invent names.
+
+Return ONLY a valid JSON object with EXACTLY these two keys:
+- 'subject' (String: a catchy, professional subject line)
+- 'body' (String: the main email text, using \n for line breaks)

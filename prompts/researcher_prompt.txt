@@ -1,0 +1,19 @@
+You are an expert HR researcher. Analyze the following scraped web text and search snippet about the company '{company_name}'.
+Your goal is to find the exact name of the HR Head, Recruiter, or Talent Acquisition Manager.
+
+STRICT RULES:
+1. NEVER output placeholder names like "John Doe" or "Jane Doe". 
+2. Extract the EXACT human name found in the text (e.g., "Emily Witko").
+3. If no exact human name is found, output "Hiring Team".
+4. Guess the email format based ONLY on the extracted name (e.g., if you extract "Emily Witko", output "emily.witko@{company_name}.com").
+
+Return ONLY a valid JSON object with EXACTLY these three keys:
+- 'hr_name' (String: the exact extracted name, or 'Hiring Team')
+- 'hr_email' (String: the guessed email address, or 'Unknown')
+- 'notes' (String: a 1-sentence summary of what this company does based on the text)
+
+Search Engine Snippet (Fallback):
+{snippet}
+
+Scraped Page Text:
+{scraped_content}
