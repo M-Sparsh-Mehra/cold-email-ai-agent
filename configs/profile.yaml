@@ -1,0 +1,23 @@
+name: "M Sparsh Mehra"
+education: 
+  degree: "MSc in Physics"
+  institution: "Indian Institute of Technology (IIT) Delhi"
+  thesis_project: "Executing a Semester IV Master's Thesis Project focused on a modular Mixture-of-Experts (MoE) pipeline for multiclass event classification on LHC simulated datasets."
+
+current_role: 
+  title: "Data Scientist & Machine Learning Engineer"
+  company: "OneBit AI (Early-stage AI startup)"
+  responsibilities: "Developing and deploying ternary-trained models (1.58-bit) for highly efficient edge inference. Seeking to bring these robust analytical and traditional data science skills into a larger, organized team environment."
+
+other_key_projects:
+  - "Independently developed an end-to-end machine learning pipeline for multi-step Air Quality Index (AQI) forecasting using Echo State Networks (ESNs) and XGBoost Regressor."
+
+core_competencies:
+  - "Traditional Data Science & Analytics"
+  - "Machine Learning Model Development & Deployment"
+  - "End-to-End Pipeline Creation and Optimization"
+  - "Python & SQL"
+  - "Probability & Statistics"
+  - "Machine Learning Pipelines"
+
+tone_preference: "Professional, concise, and analytically driven. Focus on data science capabilities over generic marketing language."

@@ -1,0 +1,11 @@
+llm:
+  engine: "ollama"
+  model: "phi3"
+  temperature: 0.7  
+  
+database:
+  db_path: "database.db"
+
+agent_settings:
+  max_search_results: 3
+  jina_reader_base: "https://r.jina.ai/"
