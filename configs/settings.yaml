@@ -1,6 +1,6 @@
 llm:
   engine: "ollama"
-  model: "phi3"
+  model: "llama3.2"
   temperature: 0.7  
   
 database:
