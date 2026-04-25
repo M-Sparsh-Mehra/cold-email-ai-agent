@@ -7,7 +7,7 @@ import logging
 from src.utils import load_yaml
 
 class WriterAgent:
-    def __init__(self, model_name="phi3", profile_path="configs/profile.yaml"):
+    def __init__(self, model_name="llama3.2", profile_path="configs/profile.yaml"):
         self.model = model_name
         self.profile = load_yaml(profile_path)
         
@@ -36,15 +36,26 @@ class WriterAgent:
                 format='json'
             )
             
-            result = json.loads(response['message']['content'])
-            subject = result.get('subject', f"Application inquiry for {company_name}")
-            body = result.get('body', "Failed to generate body.")
+            content = response['message']['content'].strip()
             
-            #combines subject and body into one clean string for our database
-            final_draft = f"SUBJECT: {subject}\n\n{body}"
-            logging.info(f"✅ Draft complete for {company_name}")
-            return final_draft
+            # Clean up potential Markdown backticks from the LLM
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0].strip()
+            elif "```" in content:
+                content = content.split("```")[1].split("```")[0].strip()
+
+            # Single parse into a dictionary
+            data = json.loads(content)
             
+            logging.info(f"✅ Draft complete for {company_name}") 
+            
+            # Use .get() with smart fallbacks
+            subject = data.get('subject', f"Data Science Inquiry - {company_name}")
+            body = data.get('body', "I am writing to express my interest in joining your team.")
+            
+            # Combine for the DB and Gmail
+            return f"SUBJECT: {subject}\n\n{body}"
+        
         except Exception as e:
             logging.error(f"Failed to draft email for {company_name}: {e}")
             return "Error generating draft."
