@@ -1,23 +1,20 @@
-name: "M Sparsh Mehra"
-education: 
-  degree: "MSc in Physics"
-  institution: "Indian Institute of Technology (IIT) Delhi"
-  thesis_project: "Executing a Semester IV Master's Thesis Project focused on a modular Mixture-of-Experts (MoE) pipeline for multiclass event classification on LHC simulated datasets."
-
-current_role: 
-  title: "Data Scientist & Machine Learning Engineer"
-  company: "OneBit AI (Early-stage AI startup)"
-  responsibilities: "Developing and deploying ternary-trained models (1.58-bit) for highly efficient edge inference. Seeking to bring these robust analytical and traditional data science skills into a larger, organized team environment."
-
-other_key_projects:
-  - "Independently developed an end-to-end machine learning pipeline for multi-step Air Quality Index (AQI) forecasting using Echo State Networks (ESNs) and XGBoost Regressor."
-
-core_competencies:
-  - "Traditional Data Science & Analytics"
-  - "Machine Learning Model Development & Deployment"
-  - "End-to-End Pipeline Creation and Optimization"
-  - "Python & SQL"
-  - "Probability & Statistics"
-  - "Machine Learning Pipelines"
-
-tone_preference: "Professional, concise, and analytically driven. Focus on data science capabilities over generic marketing language."
+name: M Sparsh Mehra
+skills:
+- FastAPI
+- Ollama
+- SQLite
+- Google API
+education:
+- Master of Science - Physics
+- Bachelor of Science (Hons.) - Physics
+current_institution: IIT Delhi
+projects:
+- Autonomous Agentic Recruitment Pipeline
+- Ultra-Low Bit Quantization for Efficient LLM Inference
+- Urban Air Quality Index (AQI) Predictor
+github_profile: https://github.com/M-Sparsh-Mehra
+linkedin_profile: https://www.linkedin.com/in/m-sparsh-mehra-b100b0225
+proof_of_work: AQI predictor dashboard -- https://urban-air-quality-index-predictor-m-sparsh-mehra.streamlit.app/
+experience_summary: Research-focused professional with expertise in machine learning,
+  AI, and data analysis.
+status: Vector extraction complete

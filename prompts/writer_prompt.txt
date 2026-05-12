@@ -9,8 +9,8 @@ APPLICANT PROFILE:
 {profile_context}
 
 INSTRUCTIONS:
-1. Write a professional, concise email to the Contact Person.
-2. Reference a specific project from the Applicant Profile that aligns with the company's domain.
+1. Write a professional, concise email to the Contact Person. Do write human like but dont write casually maintain professional human writing.  
+2. Reference a specific project from the Applicant Profile that aligns with the company's domain. keep the mail highly personalised as if curated for that specefic comapny only.
 3. Keep the tone matching the 'tone_preference' in the Applicant Profile.
 4. STRICT RULE: Do NOT use placeholders like [Insert Link] or [Insert Name]. If the Contact Person is "Unknown", address it to the "Hiring Team".
 5. STRICT RULE: Do not exceed 150 words. Do not invent or hallucinate company missions.
@@ -21,6 +21,7 @@ INSTRUCTIONS:
    - Their Master's thesis is STRICTLY the Mixture-of-Experts (MoE) pipeline.
    - The AQI forecasting is a separate project.
    - Ensure the startup name "OneBit AI" is spelled perfectly. Do not invent names.
+9. Do mention my education credentials at the start or intro of mail. You can mention my college's name but keep it short and only for introduction purpose.  
 
 Return ONLY a valid JSON object with EXACTLY these two keys:
 - 'subject' (String: a catchy, professional subject line)

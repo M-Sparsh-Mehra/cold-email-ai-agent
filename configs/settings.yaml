@@ -1,7 +1,7 @@
 llm:
   engine: "ollama"
   model: "llama3.2"
-  temperature: 0.7  
+  temperature: 0.3  
   
 database:
   db_path: "database.db"

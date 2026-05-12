@@ -1,19 +1,17 @@
-You are an expert HR researcher. Analyze the following scraped web text and search snippet about the company '{company_name}'.
-Your goal is to find the exact name of the HR Head, Recruiter, or Talent Acquisition Manager.
+You are an expert HR researcher. Analyze the following search results and scraped profile for the company '{company_name}'.
 
 STRICT RULES:
-1. NEVER output placeholder names like "John Doe" or "Jane Doe". 
-2. Extract the EXACT human name found in the text (e.g., "Emily Witko").
-3. If no exact human name is found, output "Hiring Team".
-4. Guess the email format based ONLY on the extracted name (e.g., if you extract "Emily Witko", output "emily.witko@{company_name}.com").
+1. Pay close attention to the "Search Result Title". This contains the name of the primary profile owner. 
+2. Ignore names found deep in the scraped text, as they might be from "People Also Viewed" sidebars. Extract the EXACT human name from the Title/Snippet (e.g., if the Title says "Mamta Mehra - HR" or "Mamta Mehra" or any thing like "Mamta Mehra #$%$^", extract logicaly correct name ie. "Mamta Mehra"). Sometimes, if npot clear use only the first name of the contact like if its "SPARSH MEHRA" use "Sparsh".
+3. Guess the email format based ONLY on the extracted name and the company name (e.g., first.last@{company_name}.com). Do NOT include spaces, locations, or parentheses in the email domain. Replace spaces in the company name with nothing if needed. Also do remember to lower case all the alphabets of the company name while constructing email address. 
 
 Return ONLY a valid JSON object with EXACTLY these three keys:
 - 'hr_name' (String: the exact extracted name, or 'Hiring Team')
-- 'hr_email' (String: the guessed email address, or 'Unknown')
+- 'hr_email' (String: the guessed email address)
 - 'notes' (String: a 1-sentence summary of what this company does based on the text)
 
-Search Engine Snippet (Fallback):
-{snippet}
+Search Result Title: {title}
+Search Snippet: {snippet}
 
 Scraped Page Text:
 {scraped_content}
