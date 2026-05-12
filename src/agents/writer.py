@@ -4,12 +4,21 @@ We will use Ollama's JSON mode again to ensure the LLM separates the email subje
 import ollama
 import json
 import logging
+import yaml
 from src.utils import load_yaml
+
 
 class WriterAgent:
     def __init__(self, model_name="llama3.2", profile_path="configs/profile.yaml"):
         self.model = model_name
-        self.profile = load_yaml(profile_path)
+        
+        # Safely load the YAML profile directly
+        try:
+            with open(profile_path, 'r', encoding='utf-8') as f:
+                self.profile = yaml.safe_load(f)
+        except Exception as e:
+            logging.error(f"Could not load profile engram: {e}")
+            self.profile = {"skills": "Data missing. Proceed with generic tech background."}
         
     def draft_email(self, company_name, hr_name, research_notes):
         logging.info(f"✍️ Agent 2: Drafting email for {company_name} (Contact: {hr_name})...")
