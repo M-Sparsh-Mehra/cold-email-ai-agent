@@ -14,4 +14,12 @@ google-api-python-client==2.125.0
 google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.0
 
+# PDF parsing
 pypdf
+
+# app
+Flask
+fastapi
+python-multipart
+uvicorn
+pyyaml
