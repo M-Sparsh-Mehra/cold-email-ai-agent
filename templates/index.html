@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edge Sentinel | AI Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --dark-bg: #050505;
+            --glass-bg: rgba(15, 15, 15, 0.7);
+        }
+        body {
+            background: var(--dark-bg);
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,242,255,0.1);
+        }
+        .neon-text {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0,242,255,0.5);
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-10">
+
+<!-- HEADER -->
+<div class="flex justify-between items-center mb-10 font-mono text-xs tracking-widest opacity-70 border-b border-cyan-900/30 pb-4">
+    <div>CORE_VERSION: v3.2_LLAMA</div>
+    <div class="neon-text animate-pulse">● SYSTEM_ONLINE</div>
+    <div>UPLINK_ENCRYPTED: GMAIL_API</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+<!-- LEFT -->
+<div class="lg:col-span-4 space-y-6">
+
+    <!-- IDENTITY SYNC -->
+    <div class="border border-[#00f2ff] p-6 bg-[#050505] rounded">
+        <h2 class="text-[#00f2ff] font-bold tracking-widest mb-6 border-l-4 border-[#00f2ff] pl-2">
+            RESUME PARSER
+        </h2>
+
+        <form id="uploadForm" class="flex flex-col items-center">
+            <input type="file" id="resumeFile" accept=".pdf" class="hidden" required>
+
+            <label for="resumeFile"
+                   class="w-48 h-48 rounded-full border border-gray-600 flex items-center justify-center cursor-pointer mb-4">
+                <span id="fileLabel" class="text-xs text-gray-500">DEPLOY RESUME PDF</span>
+            </label>
+
+            <button class="border border-[#00f2ff] text-[#00f2ff] px-6 py-2 text-xs font-bold w-full hover:bg-[#00f2ff] hover:text-black">
+                INITIATE PARSE
+            </button>
+        </form>
+    </div>
+
+    <div id="parseTerminal" class="hidden font-mono text-sm border-l-2 border-[#00f2ff] pl-4 p-2 bg-[#0a0a0a]">
+        <p id="statusText" class="text-yellow-400 animate-pulse">Waiting for input...</p>
+        <div id="profileOutput"></div>
+    </div>
+</div>
+
+<!-- RIGHT -->
+<div class="lg:col-span-8">
+    <div class="glass-card p-8 min-h-[600px]">
+
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold tracking-widest uppercase">Live Feed</h2>
+                <p class="text-[10px] text-[#00f2ff] tracking-widest">TRACKING ACTIVE HR OUTREACH SEQUENCES</p>
+            </div>
+
+            <button id="runPipelineBtn"
+                    onclick="engagePipeline()"
+                    class="bg-[#00f2ff] text-black px-6 py-2 text-xs font-bold tracking-widest animate-pulse">
+                RUN
+            </button>
+        </div>
+
+        <!-- TARGET LOCK -->
+        <div class="border border-gray-800 bg-[#0a0a0a] p-4 mb-6 flex gap-4">
+            <input id="newCompanyName" placeholder="Target Company" class="flex-1 bg-black border border-gray-700 text-[#00f2ff] p-2 text-xs">
+            <input id="newLocation" placeholder="Location" class="flex-1 bg-black border border-gray-700 text-[#00f2ff] p-2 text-xs">
+            <button onclick="submitTarget()" class="border border-[#00f2ff] text-[#00f2ff] px-6 py-2 text-xs">
+                LOCK TARGET
+            </button>
+        </div>
+
+        <!-- TABLE -->
+        <table class="w-full font-mono text-xs">
+            <thead>
+            <tr class="border-b border-gray-800 text-gray-500">
+                <th class="p-2 text-left">Company</th>
+                <th class="p-2 text-left">HR</th>
+                <th class="p-2 text-left">e mail</th>
+                <th class="p-2 text-left">Status</th>
+                <th class="p-2 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for company in leads %}
+            <tr class="border-b border-gray-800">
+                <td class="p-2 text-white font-bold">{{ company.company_name }}</td>
+
+                <td class="p-2 text-gray-400" id="hr-{{ company.id }}">
+                    {{ company.hr_name }}
+                </td>
+
+                <td class="p-2 text-gray-400">{{ company.hr_email }}</td>
+
+                <td class="p-2 text-[#00f2ff]" id="status-{{ company.id }}">
+                    • {{ company.status | upper }}
+                </td>
+
+                <td class="p-2 text-right" id="actions-{{ company.id }}">
+                    <button onclick="terminateTarget({{ company.id }})"
+                            class="text-red-500 text-[10px] border border-red-500/30 px-2 py-1">
+                        [ ABORT ]
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- DRAFT MODAL -->
+<div id="draftModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div class="bg-[#050505] border border-[#00f2ff] w-full max-w-3xl flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b border-[#00f2ff]/30 bg-black">
+            <h3 class="text-[#00f2ff] font-bold tracking-widest text-sm">
+                REVIEW_DRAFT: <span id="modalCompany" class="text-white"></span>
+            </h3>
+            <button onclick="closeDraftModal()" class="text-gray-500 hover:text-red-500">[ X ]</button>
+        </div>
+
+        <div class="p-4 bg-[#0a0a0a]">
+            <textarea id="draftContent" class="w-full h-80 bg-black border border-gray-800 text-gray-300 p-4 font-mono text-xs"></textarea>
+        </div>
+
+        <div class="flex justify-between p-4 border-t border-[#00f2ff]/30 bg-black">
+            <button onclick="rejectDraft()" class="border border-red-500 text-red-500 px-6 py-2 text-xs">
+                [ REJECT & DISCARD ]
+            </button>
+            <button onclick="pushToGmail()" class="bg-[#00f2ff] text-black px-8 py-2 text-xs font-bold">
+                [ DEPLOY TO GMAIL ]
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+let currentDraftId = null;
+
+async function engagePipeline() {
+    const btn = runPipelineBtn;
+    btn.innerText = "EXECUTING PROTOCOLS...";
+    btn.disabled = true;
+
+    const res = await fetch('/run-pipeline', { method: 'POST' });
+    if (res.ok) startLiveTracking();
+}
+
+function startLiveTracking() {
+    const radar = setInterval(async () => {
+        const res = await fetch('/api/leads');
+        const leads = await res.json();
+        let active = false;
+
+        leads.forEach(lead => {
+            const hr = document.getElementById(`hr-${lead.id}`);
+            const st = document.getElementById(`status-${lead.id}`);
+            const act = document.getElementById(`actions-${lead.id}`);
+
+            if (hr && lead.hr_name !== 'Unknown') hr.innerText = lead.hr_name;
+            if (st) st.innerText = `• ${lead.status.toUpperCase()}`;
+
+            if (lead.status === 'Draft Created' && act && !act.innerHTML.includes('REVIEW')) {
+                act.innerHTML = `
+                    <button onclick="openDraftModal(${lead.id})"
+                        class="text-[#00f2ff] text-[10px] border border-[#00f2ff]/30 px-2 py-1 mr-2">
+                        [ REVIEW ]
+                    </button>
+                    <button onclick="terminateTarget(${lead.id})"
+                        class="text-red-500 text-[10px] border border-red-500/30 px-2 py-1">
+                        [ ABORT ]
+                    </button>`;
+            }
+
+            if (lead.status.includes('[') || lead.status === 'Pending') active = true;
+        });
+
+        if (!active) clearInterval(radar);
+    }, 1500);
+}
+
+async function openDraftModal(id) {
+    currentDraftId = id;
+    
+    const modal = document.getElementById('draftModal');
+    const textArea = document.getElementById('draftContent');
+    modal.classList.remove('hidden');
+    textArea.value = "DECRYPTING PAYLOAD...";
+    
+    const timestamp = new Date().getTime();
+    const res = await fetch(`/api/draft/${id}?t=${timestamp}`);
+    const data = await res.json();
+    
+    document.getElementById('modalCompany').innerText = data.company_name;
+    
+    
+    setTimeout(() => {
+        textArea.value = data.draft;
+    }, 50);
+}
+
+function closeDraftModal() {
+    draftModal.classList.add('hidden');
+    currentDraftId = null;
+}
+
+async function pushToGmail() {
+    await fetch(`/api/push-draft/${currentDraftId}`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ draft: draftContent.value })
+    });
+    closeDraftModal();
+    location.reload();
+}
+
+async function rejectDraft() {
+    await fetch(`/api/reject-draft/${currentDraftId}`, { method: 'POST' });
+    closeDraftModal();
+    location.reload();
+}
+
+async function submitTarget() {
+    const fd = new FormData();
+    fd.append("company_name", newCompanyName.value);
+    fd.append("location", newLocation.value);
+    await fetch('/add-target', { method:'POST', body: fd });
+    location.reload();
+}
+
+document.getElementById('resumeFile').addEventListener('change', function(e) {
+    if(e.target.files.length > 0) {
+        const fileName = e.target.files[0].name;
+        const label = document.getElementById('fileLabel');
+        
+        // Update the text to the filename and turn it neon blue
+        label.innerText = fileName;
+        label.classList.remove('text-gray-500');
+        label.classList.add('text-[#00f2ff]', 'font-bold');
+    }
+});
+
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Stop the default page reload
+    
+    const fileInput = document.getElementById('resumeFile');
+    if (!fileInput.files.length) return;
+
+    const terminal = document.getElementById('parseTerminal');
+    const statusText = document.getElementById('statusText');
+    const profileOutput = document.getElementById('profileOutput');
+    
+    // 1. UI Update: Engage Loading Sequence
+    terminal.classList.remove('hidden');
+    statusText.className = "text-[#00f2ff] animate-pulse font-bold";
+    statusText.innerText = "[*] EXTRACTING DATA VECTORS... (LLaMA-3.2 IS PARSING)";
+    profileOutput.innerHTML = "";
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    try {
+        // 2. Send the payload to FastAPI
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        // 3. Handle the UI callback
+        if (response.ok) {
+            statusText.className = "text-green-400 font-bold";
+            statusText.innerText = "[+] PROFILE SUCCESSFULLY ENGRAMMED";
+            
+            const p = data.profile;
+            if (p) {
+                // Transform the raw JSON into the Cyber-Lab ID Card
+                const skillsHtml = p.skills ? p.skills.map(s => 
+                    `<span class="inline-block bg-[#00f2ff]/10 border border-[#00f2ff]/30 text-[#00f2ff] px-2 py-1 text-[10px] mb-1 mr-1 uppercase tracking-wider">${s}</span>`
+                ).join('') : '';
+                
+                profileOutput.innerHTML = `
+                    <div class="mt-4 border border-gray-800 bg-black p-4 shadow-[0_0_15px_rgba(0,242,255,0.1)]">
+                        <div class="text-white font-bold tracking-widest border-b border-[#00f2ff]/30 pb-2 mb-3 uppercase">${p.name || 'UNKNOWN ENTITY'}</div>
+                        <div class="text-gray-400 text-xs mb-3 italic">${p.education ? p.education[0] : 'Data Missing'}</div>
+                        <div class="mb-3 flex flex-wrap">${skillsHtml}</div>
+                        <div class="text-gray-400 text-[11px] leading-relaxed border-l-2 border-[#00f2ff] pl-2">${p.experience_summary || ''}</div>
+                    </div>
+                `;
+            }
+        } else {
+            statusText.className = "text-red-500 font-bold";
+            const errorMessage = data.detail || data.error || "Backend endpoint missing.";
+            statusText.innerText = "[-] EXTRACTION FAILED: " + errorMessage;
+        }
+    } catch (err) {
+        statusText.className = "text-red-500 font-bold";
+        statusText.innerText = "[-] CRITICAL UPLINK FAILURE.";
+    }
+});
+
+async function terminateTarget(id) {
+    if (!confirm("Terminate target?")) return;
+    await fetch(`/delete-target/${id}`, { method:'DELETE' });
+    location.reload();
+}
+</script>
+
+</body>
+</html>
